@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "hyman\\debug\\": ""
+            "hyman\\debug\\": "src/"
         }
     }
 }
