@@ -1,0 +1,27 @@
+{
+    "name": "hyman-ren/yii2-chrome-debug",
+    "type": "yii2-extension",
+    "description": "一个可以用Chrome Console 调试Yii代码的工具，相比Yii2自带debug，做到了无HTML污染，且无缓存文件产生。",
+    "keywords": ["yii2", "chrome"，"debug"],
+    "version":"0.0.1",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/hyman-ren/yii2-chrome-debug/issues",
+        "wiki": "https://github.com/hyman-ren/yii2-chrome-debug/wiki",
+        "source": "https://github.com/hyman-ren/yii2-chrome-debug"
+    },
+    "authors": [
+        {
+            "name": "hyman",
+            "email": "hyman@an2.net"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "hyman\\debug\\": ""
+        }
+    }
+}
