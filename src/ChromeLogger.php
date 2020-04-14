@@ -51,6 +51,7 @@ class ChromeLogger extends Logger
             }
             $ext = ' 耗时' . (microtime(true) - self::$timer);
         }
+        $message = is_string($message) ? $message : json_encode($message);
         $message = $per . $message .$ext;
         $traces = [];
         $count = 0;
