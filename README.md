@@ -2,7 +2,7 @@
 
 一个可以用Chrome Console 调试Yii代码的工具，相比Yii2自带debug，做到了无HTML污染，且无缓存文件产生。
 ---
-###使用方法：
+### 使用方法：
 
 * 确保你使用的是chrome内核浏览器，推荐Chrome、EDGE
 
