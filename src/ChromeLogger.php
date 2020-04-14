@@ -28,7 +28,7 @@ class ChromeLogger extends Logger
      */
     public function log($message, $level, $category = 'application'){
         if($level == self::LEVEL_PROFILE_BEGIN){
-            self::$timer = microtime(true);
+            self::$timer = microtime(true) * 1000;
         }
 
         $rel = [
@@ -49,7 +49,7 @@ class ChromeLogger extends Logger
                 self::$sqlCoounter ++;
                 $per = '第' . self::$sqlCoounter . '条SQL:';
             }
-            $ext = ' 耗时' . (microtime(true) - self::$timer);
+            $ext = ' 耗时' . (microtime(true) * 1000 - self::$timer) . 'ms';
         }
         $message = is_string($message) ? $message : json_encode($message);
         $message = $per . $message .$ext;
