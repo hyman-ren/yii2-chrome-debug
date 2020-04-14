@@ -15,6 +15,13 @@ use yii\web\View;
 class Module extends \yii\base\Module implements BootstrapInterface
 {
     protected static $time;
+
+    public $encryptType = 'base64';
+
+    public $aesKey = '';
+
+    public $aesIv = '';
+
     /**
      *
      * @param $app
@@ -22,6 +29,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public function bootstrap($app)
     {
+        if('aes' == $this->encryptType){
+            ChromePhp::setEncryptConfig($this->aesKey,$this->aesIv);
+        }
         $app->on(Application::EVENT_BEFORE_REQUEST, function () use ($app) {
             self::$time = microtime(true) * 1000;
             $logger     = new ChromeLogger();

@@ -36,6 +36,7 @@ class ChromePhp
      * @var string
      */
     const HEADER_NAME = 'Hyman-Data';
+    const HEADER_ENCRYPT = 'Hyman-Encrypt';
 
     /**
      * @var string
@@ -129,6 +130,12 @@ class ChromePhp
      * @var array
      */
     protected $_processed = array();
+
+    protected $_aesKey = '';
+
+    protected $_aesIv = '';
+
+    protected $_encryptType = 'base64';
 
     /**
      * constructor
@@ -243,6 +250,15 @@ class ChromePhp
     {
         $args = func_get_args();
         return self::_log(self::TABLE, $args);
+    }
+
+
+    public static function setEncryptConfig($key, $iv){
+        $logger = self::getInstance();
+        $logger->_aesIv = $iv;
+        $logger->_aesKey = $key;
+        $logger->_encryptType = 'aes';
+        header(self::HEADER_ENCRYPT . ': aes');
     }
 
     /**
@@ -406,8 +422,22 @@ class ChromePhp
      */
     protected function _encode($data)
     {
-        return base64_encode(utf8_encode(json_encode($data)));
+        $data = utf8_encode(json_encode($data));
+        $data = $this->_encryptType == 'aes' ? $this->_encodeAes($data) : $data;
+        return base64_encode($data);
     }
+
+    /**
+     * encodes the data to be sent along with the request
+     *
+     * @param array $data
+     * @return string
+     */
+    protected function _encodeAes($data)
+    {
+        return openssl_encrypt($data, 'AES-128-CBC', $this->_aesKey, OPENSSL_RAW_DATA, $this->_aesIv);
+    }
+
 
     /**
      * adds a setting
