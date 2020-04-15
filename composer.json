@@ -17,7 +17,9 @@
         }
     ],
     "require": {
-        "yiisoft/yii2": "*"
+        "yiisoft/yii2": "*",
+        "php": ">=7.0.0",
+        "ext-openssl": "*"
     },
     "autoload": {
         "psr-4": {
