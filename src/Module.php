@@ -41,7 +41,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $logger->setGroupMethod($groupMethod);
             $targets    = Yii::$app->getLog()->setLogger($logger);
             Yii::setLogger($logger);
-            ChromePhp::group('being');
+            ChromePhp::groupCollapsed('being');
         });
 
         $app->on(Application::EVENT_BEFORE_ACTION, function () use ($app, $groupMethod) {
@@ -49,7 +49,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $view       = $app->getView();
             $route      = $app->requestedRoute;
             ChromePhp::groupEnd();
-            ChromePhp::group($route);
+            ChromePhp::groupCollapsed($route);
             ChromePhp::$groupMethod('beforRunAction');
             $controller->on(Controller::EVENT_BEFORE_ACTION, function() use($groupMethod){
                 ChromePhp::groupEnd();
