@@ -22,7 +22,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     public $aesIv = '';
 
-    public $autoFolding = true;
+    public $autoFolding = false;
 
     /**
      *
