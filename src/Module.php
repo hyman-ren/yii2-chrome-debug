@@ -47,9 +47,21 @@ class Module extends \yii\base\Module implements BootstrapInterface
             ChromePhp::groupEnd();
             ChromePhp::groupCollapsed($route);
             ChromePhp::groupCollapsed('beforRunAction');
-            $controller->on(Controller::EVENT_BEFORE_ACTION, [$this, 'runBeforeAction']);
-            $app->getView()->on(View::EVENT_BEFORE_RENDER, [$this, 'runBeforeRender']);
-            $app->getView()->on(View::EVENT_BEGIN_PAGE, [$this, 'runBeginPage']);
+            $controller->on(Controller::EVENT_BEFORE_ACTION, function(){
+                ChromePhp::groupEnd();
+                ChromePhp::groupCollapsed('beforAction');
+            });
+            $view->on(View::EVENT_BEFORE_RENDER, function($event){
+                $viewFile = $event->viewFile ?? '';
+                ChromePhp::groupCollapsed('render file:' . $viewFile);
+            });
+            $view->on(View::EVENT_AFTER_RENDER, function($event){
+                ChromePhp::groupEnd();
+            });
+            $view->on(View::EVENT_BEGIN_PAGE, function(){ChromePhp::info('HTML Is Begin!');});
+            $view->on(View::EVENT_BEGIN_BODY, function(){ChromePhp::info('Body Is Begin!');});
+            $view->on(View::EVENT_END_BODY, function(){ChromePhp::info('Body is End!');});
+            $view->on(View::EVENT_END_PAGE, function(){ChromePhp::info('HTML is End!');});
 
         });
         $app->on(Application::EVENT_AFTER_REQUEST, function () use ($app) {
@@ -83,34 +95,18 @@ class Module extends \yii\base\Module implements BootstrapInterface
         });
     }
 
-    /**
-     *
-     * @author    hyman    hyman@an2.net
-     */
-    public function runBeforeAction()
-    {
-        ChromePhp::groupEnd();
-        ChromePhp::groupCollapsed('action');
-    }
 
     /**
      *
      * @author    hyman    hyman@an2.net
      */
-    protected function runBeforeRender()
-    {
-        ChromePhp::groupEnd();
-        ChromePhp::groupCollapsed('render');
-    }
-
-    /**
-     *
-     * @author    hyman    hyman@an2.net
-     */
-    protected function runBeginPage()
-    {
-        ChromePhp::groupEnd();
-        ChromePhp::groupCollapsed('page');
+    public function __call($name,$argv){
+        if(substr($name,0,8) == 'runEvent'){
+            $method = substr($name,8);
+            
+            return null;
+        }
+        return parent::__call($name,$argv);
     }
 
 }

@@ -67,6 +67,10 @@ class ChromeLogger extends Logger
         }
 
         $message .= "\n" . implode("\n", $traces);
+        if(substr($message,0,14) == 'Running action'){
+            ChromePhp::groupEnd();
+            ChromePhp::groupCollapsed('page');
+        }
         ChromePhp::$func($message);
         return parent::log($message, $level, $category);
     }
