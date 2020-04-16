@@ -23,34 +23,32 @@
 
 * 配置Yii2:
 &nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;无AES加密配置（开发环境推荐）文件 main-local.php
+&nbsp;&nbsp;&nbsp;&nbsp;文件 main-local.php
 
 ```php
 
    $config['bootstrap'][] = 'debug';
    $config['modules']['debug'] = [
-       'class' => \hyman\debug\Module::className(),
+        'class' => \hyman\debug\Module::className(),
+        //autoFolding 选填，分组是否自动折叠，默认自动折叠
+        'autoFolding' => true,
+
+        //encryptType选填，加密类型，目前支持两种 aes和base64，默认base64，
+        //开发环境建议base64，生产环境建议aes，
+        //选中aes  aesKey aesIv两个参数必填，且必须16位，只支持英文字母、数字
+        'encryptType' => 'aes',  
+
+        //aesKey 选填，加密的秘钥，加密类型为aes时候必填，必须16位，只支持英文字母、数字，修改后需要同步修改扩展包中对应的值
+        'aesKey' => '1234567890123456',
+
+        //aesIv 选填 加密的初始化向量，加密类型为aes时候必填，必须16位，只支持英文字母、数字，修改后需要同步修改扩展包中对应的值
+        'aesIv'  => '1234567890123456',
    ];
 	return $config;
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;AES加密配置（开发环境推荐）,秘钥可以手动修改，注意：必须是16位的，且需要同步修改扩展包中的秘钥
-&nbsp;&nbsp;&nbsp;&nbsp;PHP修改内容，文件 main-local.php
 
-```php
-
-    $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = [
-        'class' => \hyman\debug\Module::className(),
-        'encryptType' => 'aes',
-        'aesKey' => '1234567890123456',
-        'aesIv'  => '1234567890123456',
-    ];
-	return $config;
-
-```
-
-&nbsp;&nbsp;&nbsp;&nbsp;扩展包修改内容，文件 log.js
+&nbsp;&nbsp;&nbsp;&nbsp;如果aesKey、aesIv有修改，扩展包同步修改，文件 log.js
 
 ```javaScript
     var AES_IV  = '1234567890123456';

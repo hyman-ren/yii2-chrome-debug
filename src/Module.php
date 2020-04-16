@@ -22,6 +22,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     public $aesIv = '';
 
+    public $autoFolding = true;
+
     /**
      *
      * @param $app
@@ -29,33 +31,35 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public function bootstrap($app)
     {
+        $groupMethod = $this->autoFolding ? 'groupCollapsed' : 'group';
         if('aes' == $this->encryptType){
             ChromePhp::setEncryptConfig($this->aesKey,$this->aesIv);
         }
-        $app->on(Application::EVENT_BEFORE_REQUEST, function () use ($app) {
+        $app->on(Application::EVENT_BEFORE_REQUEST, function () use ($app, $groupMethod) {
             self::$time = microtime(true) * 1000;
             $logger     = new ChromeLogger();
+            $logger->setGroupMethod($groupMethod);
             $targets    = Yii::$app->getLog()->setLogger($logger);
             Yii::setLogger($logger);
-            ChromePhp::groupCollapsed('being');
+            ChromePhp::$groupMethod('being');
         });
 
-        $app->on(Application::EVENT_BEFORE_ACTION, function () use ($app) {
+        $app->on(Application::EVENT_BEFORE_ACTION, function () use ($app, $groupMethod) {
             $controller = $app->controller;
             $view       = $app->getView();
             $route      = $app->requestedRoute;
             ChromePhp::groupEnd();
-            ChromePhp::groupCollapsed($route);
-            ChromePhp::groupCollapsed('beforRunAction');
-            $controller->on(Controller::EVENT_BEFORE_ACTION, function(){
+            ChromePhp::$groupMethod($route);
+            ChromePhp::$groupMethod('beforRunAction');
+            $controller->on(Controller::EVENT_BEFORE_ACTION, function() use($groupMethod){
                 ChromePhp::groupEnd();
-                ChromePhp::groupCollapsed('beforAction');
+                ChromePhp::$groupMethod('beforAction');
             });
-            $view->on(View::EVENT_BEFORE_RENDER, function($event){
+            $view->on(View::EVENT_BEFORE_RENDER, function($event) use($groupMethod){
                 $viewFile = $event->viewFile ?? '';
-                ChromePhp::groupCollapsed('render file:' . $viewFile);
+                ChromePhp::$groupMethod('render file:' . $viewFile);
             });
-            $view->on(View::EVENT_AFTER_RENDER, function($event){
+            $view->on(View::EVENT_AFTER_RENDER, function($event) use($groupMethod){
                 ChromePhp::groupEnd();
             });
             $view->on(View::EVENT_BEGIN_PAGE, function(){ChromePhp::info('HTML Is Begin!');});
@@ -64,9 +68,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $view->on(View::EVENT_END_PAGE, function(){ChromePhp::info('HTML is End!');});
 
         });
-        $app->on(Application::EVENT_AFTER_REQUEST, function () use ($app) {
+        $app->on(Application::EVENT_AFTER_REQUEST, function () use ($app, $groupMethod) {
             ChromePhp::groupEnd();
-            ChromePhp::groupCollapsed('pageInfo');
+            ChromePhp::$groupMethod('pageInfo');
             $request  = $app->getRequest();
             $response = $app->getResponse();
             $info     = [
@@ -80,7 +84,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 'ip'         => $request->getUserIP(),
                 'time'       => $_SERVER['REQUEST_TIME_FLOAT'],
                 'statusCode' => $response->statusCode,
-                'sqlCount'   => Yii::getLogger()::$sqlCoounter,
+                'sqlCount'   => Yii::getLogger()::getSqlCount(),
                 'memory'     => sprintf('%.3f MB', memory_get_peak_usage() / 1048576),
                 'time'       => sprintf("%.2fms", (microtime(true) * 1000 - self::$time)),
             ];
@@ -93,20 +97,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
             ChromePhp::groupEnd();
             ChromePhp::groupEnd();
         });
-    }
-
-
-    /**
-     *
-     * @author    hyman    hyman@an2.net
-     */
-    public function __call($name,$argv){
-        if(substr($name,0,8) == 'runEvent'){
-            $method = substr($name,8);
-            
-            return null;
-        }
-        return parent::__call($name,$argv);
     }
 
 }

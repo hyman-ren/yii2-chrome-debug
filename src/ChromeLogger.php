@@ -11,10 +11,27 @@ use yii\log\logger;
 class ChromeLogger extends Logger
 {
     //时间计算使用
-    public static $timer = 0;
+    protected static $timer = 0;
 
     //sql计数器
-    public static $sqlCoounter = 0;
+    protected static $sqlCoounter = 0;
+
+    protected $groupMethod = 'groupCollapsed';
+
+    /**
+     * @param $groupMethod
+     * @author    hyman    hyman@an2.net
+     */
+    public function setGroupMethod($groupMethod){
+        $this->groupMethod = $groupMethod;
+    }
+
+    /**
+     * @author    hyman    hyman@an2.net
+     */
+    public static function getSqlCount(){
+        return self::$sqlCoounter;
+    }
 
     /**
      *
@@ -69,7 +86,8 @@ class ChromeLogger extends Logger
         $message .= "\n" . implode("\n", $traces);
         if(substr($message,0,14) == 'Running action'){
             ChromePhp::groupEnd();
-            ChromePhp::groupCollapsed('page');
+            $method = $this->groupMethod;
+            ChromePhp::$method('page');
         }
         ChromePhp::$func($message);
         return parent::log($message, $level, $category);
