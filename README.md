@@ -30,7 +30,7 @@
    $config['bootstrap'][] = 'debug';
    $config['modules']['debug'] = [
         'class' => \hyman\debug\Module::className(),
-        //autoFolding 选填，分组是否自动折叠，默认不折叠
+        //autoFolding 选填，内部分组是否自动折叠，默认不折叠
         'autoFolding' => true,
 
         //encryptType选填，加密类型，目前支持两种 aes和base64，默认base64，
