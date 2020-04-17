@@ -1,12 +1,11 @@
 # Yii2 Chrome Debug
 
----
 
 &nbsp;&nbsp;&nbsp;&nbsp;Yii2 Chrome Debug是一个Yii2代码的高效调试工具，提供安全的传输方式，可以用于生产环境进行安全调试。 
 
 
 # 相比Yii2自己debug，有以下优点：
----
+
 * 提供安全的传输方式，支持访问量不是太大的站点生产环境测试（采用AES对称加密，保证性能与安全）；
 * 对不同模块产生的debug记录进行了分层折叠，让你对页面执行流程和模板层级关系一目了然，方便快速定位问题；
 * 支持ajax请求debug；
@@ -16,7 +15,7 @@
 
 
 #  使用方法：
----
+
 *  确保你使用的是chrome内核浏览器，推荐Chrome、EDGE
 
 *  运行 composer require hyman-ren/yii2-chrome-debug:dev-master
