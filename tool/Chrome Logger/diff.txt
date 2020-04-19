@@ -1,0 +1,12 @@
+diff --git a/manifest.json b/manifest.json
+index 6665414..ab7d7da 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,6 +1,6 @@
+ {
+     "name": "Chrome Logger",
+-    "version": "4.0",
++    "version": "4.0.1",
+     "content_scripts": [
+         {
+             "matches": ["http://*/*", "https://*/*"],

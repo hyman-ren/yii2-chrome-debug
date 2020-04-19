@@ -1,0 +1,29 @@
+{
+    "name": "hyman-ren/yii2-chrome-debug",
+    "type": "yii2-extension",
+    "description": "Yii2 Chrome Debug是一个Yii2代码的高效调试工具，提供安全的传输方式，可以用于生产环境进行安全调试。",
+    "keywords": ["yii2", "chrome", "debug"],
+    "version":"0.0.1",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/hyman-ren/yii2-chrome-debug/issues",
+        "wiki": "https://github.com/hyman-ren/yii2-chrome-debug/wiki",
+        "source": "https://github.com/hyman-ren/yii2-chrome-debug"
+    },
+    "authors": [
+        {
+            "name": "hyman",
+            "email": "hyman@an2.net"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "php": ">=7.0.0",
+        "ext-openssl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "hyman\\debug\\": "src/"
+        }
+    }
+}
