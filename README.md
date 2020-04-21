@@ -30,8 +30,12 @@
    $config['bootstrap'][] = 'debug';
    $config['modules']['debug'] = [
         'class' => \hyman\debug\Module::className(),
+
         //autoFolding 选填，内部分组是否自动折叠，默认不折叠
         'autoFolding' => true,
+
+        //debugLevel 选填，日志追溯层级，类似log中的traceLevel
+        'debugLevel' => 3,
 
         //encryptType选填，加密类型，目前支持两种 aes和base64，默认base64，
         //开发环境建议base64，生产环境建议aes，
