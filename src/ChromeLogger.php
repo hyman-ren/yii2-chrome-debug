@@ -18,6 +18,8 @@ class ChromeLogger extends Logger
 
     protected $groupMethod = 'groupCollapsed';
 
+    protected $debugLevel = 3;
+
     /**
      * @param $groupMethod
      * @author    hyman    hyman@an2.net
@@ -31,6 +33,10 @@ class ChromeLogger extends Logger
      */
     public static function getSqlCount(){
         return self::$sqlCoounter;
+    }
+
+    public function setDebugLevel($level){
+        $this->debugLevel = $level;
     }
 
     /**
@@ -77,7 +83,7 @@ class ChromeLogger extends Logger
             if (isset($trace['file'], $trace['line']) && strpos($trace['file'], YII2_PATH) !== 0) {
                 unset($trace['object'], $trace['args']);
                 $traces[] = $trace['file'] . ' line:' . $trace['line'];
-                if (++$count >= 3) {
+                if (++$count >= $this->debugLevel) {
                     break;
                 }
             }

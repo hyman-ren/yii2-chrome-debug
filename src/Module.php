@@ -24,6 +24,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     public $autoFolding = false;
 
+    public $debugLevel = 3;
+
     /**
      *
      * @param $app
@@ -39,6 +41,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             self::$time = microtime(true) * 1000;
             $logger     = new ChromeLogger();
             $logger->setGroupMethod($groupMethod);
+            $logger->setDebugLevel($this->debugLevel);
             $targets    = Yii::$app->getLog()->setLogger($logger);
             Yii::setLogger($logger);
             ChromePhp::groupCollapsed('being');
