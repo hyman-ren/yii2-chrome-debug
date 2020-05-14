@@ -26,10 +26,13 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     public $debugLevel = 3;
 
+<<<<<<< HEAD
     public $sqlWarningTime = 80; //执行稍长sql执行时间
 
     public $sqlNeedOptimizeTime = 500; //需要优化sql执行时间
 
+=======
+>>>>>>> 9a7f3ba531f581a96489c2829d87a1c5b86583db
     /**
      *
      * @param $app
