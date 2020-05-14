@@ -20,6 +20,10 @@ class ChromeLogger extends Logger
 
     protected $debugLevel = 3;
 
+    protected $sqlWarningTime = 80; //执行稍长sql执行时间
+
+    protected $sqlNeedOptimizeTime = 500; //需要优化sql执行时间
+
     /**
      * @param $groupMethod
      * @author    hyman    hyman@an2.net
@@ -35,8 +39,21 @@ class ChromeLogger extends Logger
         return self::$sqlCoounter;
     }
 
+    /**
+     * 
+     * @author    hyman    hyman@an2.net
+     */
     public function setDebugLevel($level){
         $this->debugLevel = $level;
+    }
+
+    /**
+     * 
+     * @author    hyman    hyman@an2.net
+     */
+    public function setSqlWarningTime($warnIngTime, $needOptimizeTime){
+        $this->sqlWarningTime = $warnIngTime;
+        $this->sqlNeedOptimizeTime = $needOptimizeTime;
     }
 
     /**
@@ -71,7 +88,16 @@ class ChromeLogger extends Logger
                 self::$sqlCoounter++;
                 $per = '第' . self::$sqlCoounter . '条SQL:';
             }
-            $ext = ' 耗时' . (microtime(true) * 1000 - self::$timer) . 'ms';
+            $costTime = (microtime(true) * 1000 - self::$timer);
+            $ext = sprintf(" 耗时%.4fms", $costTime);
+
+            if($costTime > $this->sqlWarningTime){
+                $func = 'warn';
+            }
+
+            if($costTime > $this->sqlNeedOptimizeTime){
+                $func = 'error';
+            }
         }
         $message = is_string($message) ? $message : json_encode($message);
         $message = $per . $message . $ext;
