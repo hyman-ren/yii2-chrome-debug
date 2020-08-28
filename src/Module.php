@@ -39,6 +39,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public function bootstrap($app)
     {
+        if(empty($_COOKIE['hymanDebug'])){
+            return;
+        }
         $groupMethod = $this->autoFolding ? 'groupCollapsed' : 'group';
         if('aes' == $this->encryptType){
             ChromePhp::setEncryptConfig($this->aesKey,$this->aesIv);
