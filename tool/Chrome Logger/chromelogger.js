@@ -44,11 +44,14 @@
     function _toggleActivity(tab) {
         var url = tab.url;
         var host = _getHost(url);
+
         if (_hostIsActive(host)) {
+            _setCookies(url,'hymanDebug',"0",86400 * 365);
             delete localStorage[host];
             _deactivate(tab.id);
             return;
         }
+        _setCookies(url,'hymanDebug',"1",86400 * 365);
         localStorage[host] = true;
         _activate(tab.id);
     }
@@ -211,6 +214,21 @@
             }
         });
     }
+
+    function _setCookies(url, name, value, expireSecond) {
+        //var exdate = new Date();
+        var param = {
+            url : url,
+            name : name,
+            value : value,
+            path: '/'
+        };
+        if (!!expireSecond) {
+            param.expirationDate = new Date().getTime() / 1000 + expireSecond;
+        }
+        chrome.cookies.set(param, function(cookie) {});
+    }
+
 
     _addListeners();
 }) ();
